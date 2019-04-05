@@ -141,7 +141,13 @@ class CANBusSensor(object):
                                'z': vehicle_physics.center_of_mass.x
                                },
             'steering_curve': steering_curve,
-            'wheels': wheels_list_dict
+            'wheels': wheels_list_dict,
+            'orientation': {'roll': self._vehicle.get_transform().rotation.roll,
+                            'pitch': self._vehicle.get_transform().rotation.pitch,
+                            'yaw': self._vehicle.get_transform().rotation.yaw},
+            'location': {'x': self._vehicle.get_transform().location.x,
+                            'y': self._vehicle.get_transform().location.y,
+                            'z': self._vehicle.get_transform().location.z}
         }
 
     @threaded
@@ -190,8 +196,8 @@ class CallBack(object):
         array = np.frombuffer(image.raw_data, dtype=np.dtype("uint8"))
         array = copy.deepcopy(array)
         array = np.reshape(array, (image.height, image.width, 4))
-        array = array[:, :, :3]
-        array = array[:, :, ::-1]
+        #array = array[:, :, :3]
+        #array = array[:, :, ::-1]
         self._data_provider.update_sensor(tag, array, image.frame_number)
 
     def _parse_lidar_cb(self, lidar_data, tag):

@@ -68,11 +68,11 @@ class AutonomousAgent():
         """
         pass
 
-    def __call__(self):
+    def __call__(self, timestamp):
         input_data = self.sensor_interface.get_data()
 
 
-        control = self.run_step(input_data)
+        control = self.run_step(timestamp, input_data)
         control.manual_gear_shift = False
 
         return control

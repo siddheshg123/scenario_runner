@@ -321,8 +321,8 @@ class ChallengeEvaluator(object):
                                                      roll=sensor_spec['roll'],
                                                      yaw=sensor_spec['yaw'])
                 elif sensor_spec['type'].startswith('sensor.lidar'):
-                    bp.set_attribute('range', '200')
-                    bp.set_attribute('rotation_frequency', '10')
+                    bp.set_attribute('range', '5000')
+                    bp.set_attribute('rotation_frequency', '20')
                     bp.set_attribute('channels', '32')
                     bp.set_attribute('upper_fov', '15')
                     bp.set_attribute('lower_fov', '-30')
@@ -476,7 +476,7 @@ class ChallengeEvaluator(object):
             CarlaDataProvider.on_carla_tick()
             # update all scenarios
 
-            ego_action = self.agent_instance()
+            ego_action = self.agent_instance(self.timestamp)
             for scenario in list_scenarios:
                 scenario.scenario.scenario_tree.tick_once()
                 # The scenarios may change the control if it applies.
