@@ -16,10 +16,10 @@ void coordinates::mouseMoveEvent(QMouseEvent *mouse_event)
     {
         if(mouse_pos.x()>=0 && mouse_pos.y()>=0)
         {
-            std::cout<<"x:";
-            std::cout<<mouse_pos.x()<<"\n";
-            std::cout<<"y:";
-            std::cout<<mouse_pos.y()<<"\n";
+//            std::cout<<"x:";
+//            std::cout<<mouse_pos.x()<<"\t";
+//            std::cout<<"y:";
+//            std::cout<<mouse_pos.y()<<"\n";
             emit sendMousePosition(mouse_pos);
 
         }

@@ -25,8 +25,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++14
 INCLUDEPATH += /home/ratnavali/workspace/libcarla/install-folder/include/
 INCLUDEPATH += /home/ratnavali/workspace/libcarla/install-folder/include/system/
+INCLUDEPATH += /home/ratnavali/workspace/libcarla/install-folder/include/traffic_manager/
+INCLUDEPATH += /home/ratnavali/workspace/libcarla/install-folder/include/traffic_manager/src/
+INCLUDEPATH += /home/ratnavali/workspace/libcarla/install-folder/include/traffic_manager/include/
 INCLUDEPATH += /home/ratnavali/anaconda2/include/python2.7
 LIBS += -L/home/ratnavali/workspace/libcarla/install-folder/lib/ -lcarla_client -lrpc -lboost_system -lboost_filesystem -lpython2.7
+
 
 SOURCES += \
     coordinates.cpp \
@@ -36,9 +40,9 @@ SOURCES += \
 
 HEADERS += \
     coordinates.h \
+    helper.h \
         mainwindow.h \
-    carlastreamthread.h \
-    matplotlibcpp.h
+    carlastreamthread.h
 
 FORMS += \
         mainwindow.ui

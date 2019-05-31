@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>920</width>
-    <height>533</height>
+    <width>820</width>
+    <height>500</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,68 +19,78 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>920</width>
-      <height>560</height>
+      <width>500</width>
+      <height>500</height>
      </rect>
-    </property>
-    <property name="mouseTracking">
-     <bool>true</bool>
-    </property>
-    <property name="tabletTracking">
-     <bool>true</bool>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: &quot;transparent&quot;;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>960</x>
-      <y>730</y>
-      <width>261</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-   </widget>
    <widget class="coordinates" name="graphicsView_2">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>920</width>
-      <height>560</height>
+      <width>500</width>
+      <height>500</height>
      </rect>
     </property>
-    <property name="mouseTracking">
-     <bool>true</bool>
+    <property name="styleSheet">
+     <string notr="true">background-color:&quot;transparent&quot; ;</string>
     </property>
-    <property name="tabletTracking">
-     <bool>true</bool>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>350</y>
+      <width>151</width>
+      <height>51</height>
+     </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: transparent;</string>
+     <string notr="true">background-color: rgb(211, 215, 207);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>200</y>
+      <width>151</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>generate_waypoints</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="distance">
+    <property name="geometry">
+     <rect>
+      <x>610</x>
+      <y>140</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
     </property>
    </widget>
    <zorder>graphicsView_2</zorder>
    <zorder>graphicsView</zorder>
    <zorder>label</zorder>
+   <zorder>pushButton</zorder>
+   <zorder>distance</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>920</width>
+     <width>820</width>
      <height>22</height>
     </rect>
    </property>
@@ -100,7 +110,7 @@
   <customwidget>
    <class>coordinates</class>
    <extends>QGraphicsView</extends>
-   <header location="global">coordinates.h</header>
+   <header>coordinates.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

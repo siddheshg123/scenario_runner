@@ -3,19 +3,15 @@
 
 
 #include <iostream>
-#include<QPoint>
-#include <QObject>
-#include <QWidget>
-#include <QLabel>
+
 #include <QImage>
 #include <QGraphicsScene>
 #include <QMainWindow>
 #include <QMouseEvent>
-#include <QMoveEvent>
+
 #include "carlastreamthread.h"
 
 using namespace std::literals::chrono_literals;
-
 namespace Ui {
 class MainWindow;
 }
@@ -25,15 +21,17 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-public slots:
+private slots:
     int updatePixmap(const QImage &image);
     void showMousePosition(QPoint& pos);
+    void on_pushButton_clicked();
 
 private:
     Ui::MainWindow *ui;
+
     CarlaStreamThread thread;
 
     QPixmap image_map;
