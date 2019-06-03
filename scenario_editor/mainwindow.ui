@@ -43,8 +43,8 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>600</x>
-      <y>350</y>
+      <x>590</x>
+      <y>290</y>
       <width>151</width>
       <height>51</height>
      </rect>
@@ -56,34 +56,73 @@
      <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="GenerateWayPoints">
     <property name="geometry">
      <rect>
-      <x>600</x>
-      <y>200</y>
-      <width>151</width>
+      <x>590</x>
+      <y>90</y>
+      <width>171</width>
       <height>61</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(193, 125, 17);</string>
+    </property>
     <property name="text">
-     <string>generate_waypoints</string>
+     <string>GENERATE WAYPOINTS</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="distance">
     <property name="geometry">
      <rect>
-      <x>610</x>
-      <y>140</y>
-      <width>131</width>
+      <x>590</x>
+      <y>40</y>
+      <width>151</width>
       <height>31</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="show_path">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>160</y>
+      <width>151</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(252, 175, 62);
+color: rgb(0, 0, 0);
+background-color: rgb(138, 226, 52);</string>
+    </property>
+    <property name="text">
+     <string>SHOW PATHS</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>250</y>
+      <width>151</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(252, 175, 62);</string>
+    </property>
+    <property name="text">
+     <string>Co-ordinates:</string>
     </property>
    </widget>
    <zorder>graphicsView_2</zorder>
    <zorder>graphicsView</zorder>
    <zorder>label</zorder>
-   <zorder>pushButton</zorder>
+   <zorder>GenerateWayPoints</zorder>
    <zorder>distance</zorder>
+   <zorder>show_path</zorder>
+   <zorder>label_2</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -110,7 +149,7 @@
   <customwidget>
    <class>coordinates</class>
    <extends>QGraphicsView</extends>
-   <header>coordinates.h</header>
+   <header location="global">coordinates.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

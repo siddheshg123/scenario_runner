@@ -28,7 +28,7 @@ int MainWindow::updatePixmap(const QImage &image) {
 
 void MainWindow::mousePressEvent(QMouseEvent* event) {
     try {
-        thread.makeATesla(event->x(), event->y());
+        thread.CarOperations(event->x(), event->y());
     } catch(...) {
         std::cout << "\nFailed to spawn actor !\n";
     }
@@ -39,8 +39,16 @@ void MainWindow::showMousePosition(QPoint &pos)
 }
 
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_GenerateWayPoints_clicked()
 {
     CarlaStreamThread c;
-    c.generate_waypoints();
+    c.GenerateWaypoints();
+}
+
+
+
+void MainWindow::on_show_path_clicked()
+{
+    CarlaStreamThread c;
+    c.ShowPath();
 }

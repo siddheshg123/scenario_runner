@@ -1,27 +1,20 @@
 #include "carlastreamthread.h"
+#include"mainwindow.h"
 #include "helper.h"
 #include<QMouseEvent>
 #include <QMoveEvent>
 #include <QWidget>
 
 
-template <typename RangeT, typename RNG>
-
-static auto &RandomChoice(const RangeT &range, RNG &&generator)
-{
-  EXPECT_TRUE(range.size() > 0u);
-  std::uniform_int_distribution<size_t> dist{0u, range.size() - 1u};
-  return range[dist(std::forward<RNG>(generator))];
-}
 
 
-//std::vector<boost::shared_ptr<carla::client::Waypoint>> list_of_waypoints;
-
+//========================================================================================================================================================================================================
+// ******************************************************************CarlaStreamThread Constructor********************************************************************************************************
+//========================================================================================================================================================================================================
 
 CarlaStreamThread::CarlaStreamThread(QObject* parent):QThread(parent),client_connection("localhost", 2000)
 {
-    auto world = client_connection.GetWorld();
-    auto blueprint_library = world.GetBlueprintLibrary();
+    auto blueprint_library = client_connection.GetWorld().GetBlueprintLibrary();
     auto camera_bp = (carla::client::ActorBlueprint*)blueprint_library->Find("sensor.camera.rgb");
     camera_bp->SetAttribute("image_size_x", "500");
     camera_bp->SetAttribute("image_size_y", "500");
@@ -35,17 +28,20 @@ CarlaStreamThread::CarlaStreamThread(QObject* parent):QThread(parent),client_con
     };
 
 
-    auto cam_actor = world.SpawnActor(*camera_bp, camera_transform);
+    auto cam_actor = client_connection.GetWorld().SpawnActor(*camera_bp, camera_transform);
     camera = boost::static_pointer_cast<carla::client::Sensor>(cam_actor);
 
     camera->Listen([this](auto data)
     {
         this->image_callback(data);
-        auto info = camera->GetLocation();
-//    std::cout<< "Camera location is ------>" <<info.x<<'\t'<<info.y<< '\t'<<info.z<<'\n';
-      }
-    );
+    });
 }
+
+
+//========================================================================================================================================================================================================
+// ******************************************************************CarlaStreamThread Destructor********************************************************************************************************
+//========================================================================================================================================================================================================
+
 
 CarlaStreamThread::~CarlaStreamThread(){
     camera->Destroy();
@@ -54,9 +50,20 @@ CarlaStreamThread::~CarlaStreamThread(){
     }
 }
 
+
+//========================================================================================================================================================================================================
+// ******************************************************************CarlaStreamThread :: run()********************************************************************************************************
+//========================================================================================================================================================================================================
+
+
 void CarlaStreamThread::run() {
     QThread::exec();
 }
+
+//========================================================================================================================================================================================================
+// ******************************************************************CarlaStreamThread :: image callback()********************************************************************************************************
+//========================================================================================================================================================================================================
+
 
 int CarlaStreamThread::image_callback (carla::SharedPtr<carla::sensor::SensorData> data) {
 
@@ -68,95 +75,131 @@ int CarlaStreamThread::image_callback (carla::SharedPtr<carla::sensor::SensorDat
     return 0;
 }
 
+//========================================================================================================================================================================================================
+// ******************************************************************CarlaStreamThread Interensic Parameters********************************************************************************************************
+//========================================================================================================================================================================================================
 
-//carlastreamthread.cpp:89:11: error: no viable conversion from 'std::vector<SharedPtr<Waypoint> >' (aka 'vector<boost::shared_ptr<carla::client::Waypoint> >') to 'float'
-
-
-
-std::vector<boost::shared_ptr<carla::client::Waypoint>> CarlaStreamThread::makeATesla(int x, int y)
+std::vector<float> CarlaStreamThread::InterensicParametes(int x,int y)
 {
-    auto world = client_connection.GetWorld();
-    auto map = world.GetMap();
+    std::vector<float> output;
+    float xp = ((x-250.0f) * (2.0f* tan(3.14f/3.0f)*50.0f)/500.0f);
+    output.push_back(xp);
+    float yp = ((y-250.0f) * (2.0f* tan(3.14f/3.0f)*50.0f)/500.0f);
+    output.push_back(yp);
 
+    return output;
+}
+
+//========================================================================================================================================================================================================
+// ******************************************************************CarlaStreamThread CarOperations********************************************************************************************************
+//========================================================================================================================================================================================================
+
+std::vector<std::vector<boost::shared_ptr<carla::client::Waypoint>>> CarlaStreamThread::all_waypoints = (std::vector<std::vector<boost::shared_ptr<carla::client::Waypoint>>>)0;
+std::vector<boost::shared_ptr<carla::client::Waypoint>> CarlaStreamThread::CarOperations(int x=0, int y=0)
+{
+    std::vector<boost::shared_ptr<carla::client::Waypoint> > waypoints_for_a_distance ;
+    std::vector<boost::shared_ptr<carla::client::Waypoint> > list_of_next_n_waypoints;
+    auto world = client_connection.GetWorld();
     auto blueprint_library = world.GetBlueprintLibrary();
     auto bp = blueprint_library->Find("vehicle.tesla.model3");
-
-    auto delay = carla::time_duration::seconds(8);
-
-
-    auto new_x = (x-250) * (2* tan(3.14/3)*50)/500;
-    auto new_y = (y-250) * (2* tan(3.14/3)*50)/500;
-//    std::cout<<"Value of new x:"<<new_x<<"\t"<< "Value of new y:"<<new_y<<"\n";
-
     auto transform = carla::geom::Transform
     {
-        carla::geom::Location{(float)new_x, (float)new_y, 8.0f},
+        carla::geom::Location{InterensicParametes(x,y)[0], InterensicParametes(x,y)[1], 8.0f},
         carla::geom::Rotation{0.0f, 0.0f, 0.0f}
      };
 
+    auto map = world.GetMap();
     auto waypoint_map = map->GetWaypoint(transform.location);
-    std::vector<boost::shared_ptr<carla::client::Waypoint> > waypoints_for_a_distance = waypoint_map->GetNext(1.0);
-    std::vector<boost::shared_ptr<carla::client::Waypoint> > list_of_next_n_waypoints;
-    //boost::shared_ptr<carla::client::Waypoint> next = waypoints_for_a_distance[0];
-    for(int i =0 ;i<20;i++)
+    waypoints_for_a_distance = waypoint_map->GetNext(1.0);
+
+
+
+    for(int i =0 ;i<50;i++)
     {
+
        list_of_next_n_waypoints.push_back(waypoints_for_a_distance[0]);
+       std::cout<<"x_coordinate: "<<i<<" "<<waypoints_for_a_distance[0]->GetTransform().location.x<<"\n";
        waypoints_for_a_distance = (waypoints_for_a_distance[0])->GetNext(1.0);
     }
-
-//    std::cout<<typeid (waypoints_for_a_distance).name()<<"\n";
-    std::cout<<"SIZE OF WAYPOINT_FAR A DISTANCE::"<<waypoints_for_a_distance.size()<<"\n";
-//    list_of_waypoints = waypoints_for_a_distance;
-    //std::cout<<"SIZE OF LIST OF WAYPOINTS::"<<list_of_waypoints.size()<<"\n";
-    for (auto i =list_of_next_n_waypoints.begin();i<list_of_next_n_waypoints.end();i++)
-    {
-
-        world.MakeDebugHelper().DrawPoint((*i)->GetTransform().location,0.05,{255u,0u,0u},15.0f,true);
-        std::cout<<"------------------------------------------"<<"\n";
-        std::cout<<"Value of X coordinate: "<< (*i)->GetTransform().location.x<<"\n";
-        std::cout<<"Value of Y coordinate: "<<(*i)->GetTransform().location.y<<"\n";
-        std::cout<<"Value of Z coordinate: "<<(*i)->GetTransform().location.z<<"\n";
-        std::cout<<"Value of PITCH coordinate: "<<(*i)->GetTransform().rotation.pitch<<"\n";
-        std::cout<<"Value of YAW coordinate: "<<(*i)->GetTransform().rotation.yaw<<"\n";
-        std::cout<<"Value of ROLL coordinate: "<<(*i)->GetTransform().rotation.roll<<"\n";
-
-    }  
+    all_waypoints.push_back(list_of_next_n_waypoints);
+    std::cout<< all_waypoints.size()<<"\n";
+    //ShowPath(all_waypoints);
 
     auto new_transform = carla::geom::Transform
     {
             carla::geom::Location{waypoint_map->GetTransform().location.x, waypoint_map->GetTransform().location.y, waypoint_map->GetTransform().location.z},
             carla::geom::Rotation{waypoint_map->GetTransform().rotation.pitch, waypoint_map->GetTransform().rotation.yaw,waypoint_map->GetTransform().rotation.roll}
     };
+
     auto actor = world.SpawnActor(*bp, new_transform);
-    //carla::client::Vehicle vehicle(actor);
-    world.WaitForTick(delay);
+
+    //Settransform(list_of_next_n_waypoints,actor);
+
     actor_list.push_back(actor);
-    std::cout<<"debug check1"<<"\n";
-    return waypoints_for_a_distance;
+    //std::cout<<"debug check1"<<"\n";
+    return list_of_next_n_waypoints;
 }
 
+//========================================================================================================================================================================================================
+// ******************************************************************CarlaStreamThread Settransform********************************************************************************************************
+//========================================================================================================================================================================================================
+
+ void CarlaStreamThread::Settransform(std::vector<boost::shared_ptr<carla::client::Waypoint> > result, boost::shared_ptr<carla::client::Actor> actor)
+ {
+     auto delay = carla::time_duration::seconds(10);
+
+     auto world = client_connection.GetWorld();
+
+     for (auto i =result.begin();i<result.end();i++)
+     {
+         world.WaitForTick(delay);
+         //std::cout<<(*i)->GetTransform().location.x<<"\n";
+         actor->SetTransform((*i)->GetTransform());
+         //std::cout<<"debug check0"<<"\n";
+     }
+ }
+
+//========================================================================================================================================================================================================
+// ******************************************************************CarlaStreamThread ShowPath********************************************************************************************************
+//========================================================================================================================================================================================================
+
+void CarlaStreamThread::ShowPath()
+
+{
+    auto world = client_connection.GetWorld();
+    std::cout<<"debug for showpath"<<"\n";
+    std::vector<std::vector<boost::shared_ptr<carla::client::Waypoint>>> path_points = all_waypoints;
+    for (auto i =path_points.begin();i<path_points.end();i++)
+    {
+        for(auto j = i->begin();j<i->end();j++)
+        {
+
+        world.MakeDebugHelper().DrawPoint((*j)->GetTransform().location,0.05f,{255u,0u,0u},15.0f,true);
+    }
+    }
+
+}
+
+//========================================================================================================================================================================================================
+// ******************************************************************CarlaStreamThread Generate waypoints********************************************************************************************************
+//========================================================================================================================================================================================================
 
 
 
- int CarlaStreamThread::generate_waypoints()
+ int CarlaStreamThread::GenerateWaypoints()
  {
      auto world = client_connection.GetWorld();
      auto map = world.GetMap();
      auto list_of_waypoints = map->GenerateWaypoints(1.0);
-//     std::cout<<"Type of waypoints::"<<typeid(list_of_waypoints).name();
-     //std::cout<<list_of_waypoints.size()<<"\n";
 
      for (auto i =list_of_waypoints.begin();i<list_of_waypoints.end();i++)
      {
-         world.MakeDebugHelper().DrawPoint((*i)->GetTransform().location,0.05,{255u,255u,255u},10.0f,true);
-         std::cout<<"------------------------------------------"<<"\n";
-         std::cout<<"Value of X coordinate: "<< (*i)->GetTransform().location.x<<"\n";
-         std::cout<<"Value of Y coordinate: "<<(*i)->GetTransform().location.y<<"\n";
-         std::cout<<"Value of Z coordinate: "<<(*i)->GetTransform().location.z<<"\n";
-         std::cout<<"Value of PITCH coordinate: "<<(*i)->GetTransform().rotation.pitch<<"\n";
-         std::cout<<"Value of YAW coordinate: "<<(*i)->GetTransform().rotation.yaw<<"\n";
-         std::cout<<"Value of ROLL coordinate: "<<(*i)->GetTransform().rotation.roll<<"\n";
 
-     }
+         world.MakeDebugHelper().DrawPoint((*i)->GetTransform().location,0.05,{255u,255u,255u},10.0f,true);
+      }
      return 0;
  }
+
+ //========================================================================================================================================================================================================
+ // ******************************************************************END********************************************************************************************************
+ //========================================================================================================================================================================================================

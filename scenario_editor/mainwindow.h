@@ -22,12 +22,20 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+
     ~MainWindow();
 
 private slots:
     int updatePixmap(const QImage &image);
     void showMousePosition(QPoint& pos);
-    void on_pushButton_clicked();
+    void on_GenerateWayPoints_clicked();
+    void on_show_path_clicked();
+
+
+
+
+
+
 
 private:
     Ui::MainWindow *ui;
