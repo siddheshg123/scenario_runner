@@ -95,7 +95,8 @@ std::vector<float> CarlaStreamThread::InterensicParametes(int x,int y)
 //========================================================================================================================================================================================================
 
 std::vector<std::vector<boost::shared_ptr<carla::client::Waypoint>>> CarlaStreamThread::all_waypoints = (std::vector<std::vector<boost::shared_ptr<carla::client::Waypoint>>>)0;
-std::vector<boost::shared_ptr<carla::client::Waypoint>> CarlaStreamThread::CarOperations(int x=0, int y=0)
+std::vector<carla::SharedPtr<carla::client::Actor>> CarlaStreamThread::actor_list_set = (std::vector<carla::SharedPtr<carla::client::Actor>>)0;
+void CarlaStreamThread::CarOperations(int x=0, int y=0)
 {
     std::vector<boost::shared_ptr<carla::client::Waypoint> > waypoints_for_a_distance ;
     std::vector<boost::shared_ptr<carla::client::Waypoint> > list_of_next_n_waypoints;
@@ -133,30 +134,52 @@ std::vector<boost::shared_ptr<carla::client::Waypoint>> CarlaStreamThread::CarOp
 
     auto actor = world.SpawnActor(*bp, new_transform);
 
-    //Settransform(list_of_next_n_waypoints,actor);
+   // Settransform(list_of_next_n_waypoints,actor);
 
-    actor_list.push_back(actor);
+   actor_list.push_back(actor);
+   actor_list_set.push_back(actor);
     //std::cout<<"debug check1"<<"\n";
-    return list_of_next_n_waypoints;
 }
 
 //========================================================================================================================================================================================================
 // ******************************************************************CarlaStreamThread Settransform********************************************************************************************************
 //========================================================================================================================================================================================================
 
- void CarlaStreamThread::Settransform(std::vector<boost::shared_ptr<carla::client::Waypoint> > result, boost::shared_ptr<carla::client::Actor> actor)
+// void CarlaStreamThread::Settransform(std::vector<boost::shared_ptr<carla::client::Waypoint> > result, boost::shared_ptr<carla::client::Actor> actor)
+// {
+//     auto delay = carla::time_duration::seconds(10);
+
+//     auto world = client_connection.GetWorld();
+
+
+//     for (auto i =result.begin();i<result.end();i++)
+//     {
+//         world.WaitForTick(delay);
+//         //std::cout<<(*i)->GetTransform().location.x<<"\n";
+//         actor->SetTransform((*i)->GetTransform());
+//         //std::cout<<"debug check0"<<"\n";
+//     }
+// }
+
+
+ void CarlaStreamThread::Settransform()
  {
      auto delay = carla::time_duration::seconds(10);
 
      auto world = client_connection.GetWorld();
 
-     for (auto i =result.begin();i<result.end();i++)
+
+     for (int i =0;i<actor_list_set.size();i++)
      {
          world.WaitForTick(delay);
+         auto list_actor_waypoints = all_waypoints[i];
          //std::cout<<(*i)->GetTransform().location.x<<"\n";
-         actor->SetTransform((*i)->GetTransform());
+         for(auto j = list_actor_waypoints.begin();j<list_actor_waypoints.end();j++)
+         {
+             actor_list_set[i]->SetTransform((*j)->GetTransform());
          //std::cout<<"debug check0"<<"\n";
      }
+ }
  }
 
 //========================================================================================================================================================================================================

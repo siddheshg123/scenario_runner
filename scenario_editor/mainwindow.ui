@@ -44,7 +44,7 @@
     <property name="geometry">
      <rect>
       <x>590</x>
-      <y>290</y>
+      <y>370</y>
       <width>151</width>
       <height>51</height>
      </rect>
@@ -87,7 +87,7 @@
      <rect>
       <x>590</x>
       <y>160</y>
-      <width>151</width>
+      <width>171</width>
       <height>61</height>
      </rect>
     </property>
@@ -104,7 +104,7 @@ background-color: rgb(138, 226, 52);</string>
     <property name="geometry">
      <rect>
       <x>590</x>
-      <y>250</y>
+      <y>330</y>
       <width>151</width>
       <height>31</height>
      </rect>
@@ -116,6 +116,23 @@ background-color: rgb(138, 226, 52);</string>
      <string>Co-ordinates:</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="SetTransform">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>240</y>
+      <width>171</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(237, 212, 0);</string>
+    </property>
+    <property name="text">
+     <string>SET TRANSFORM</string>
+    </property>
+   </widget>
    <zorder>graphicsView_2</zorder>
    <zorder>graphicsView</zorder>
    <zorder>label</zorder>
@@ -123,6 +140,7 @@ background-color: rgb(138, 226, 52);</string>
    <zorder>distance</zorder>
    <zorder>show_path</zorder>
    <zorder>label_2</zorder>
+   <zorder>SetTransform</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

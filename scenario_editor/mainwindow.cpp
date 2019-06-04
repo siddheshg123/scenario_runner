@@ -52,3 +52,9 @@ void MainWindow::on_show_path_clicked()
     CarlaStreamThread c;
     c.ShowPath();
 }
+
+void MainWindow::on_SetTransform_clicked()
+{
+    CarlaStreamThread c;
+    c.Settransform();
+}

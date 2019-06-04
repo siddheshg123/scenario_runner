@@ -1,3 +1,4 @@
+
 #ifndef CARLASTREAMTHREAD_H
 #define CARLASTREAMTHREAD_H
 
@@ -29,13 +30,15 @@ class CarlaStreamThread : public QThread
     Q_OBJECT
 
 public:
+    static std::vector<carla::SharedPtr<carla::client::Actor>> actor_list_set;
     static std::vector<std::vector<boost::shared_ptr<carla::client::Waypoint>>> all_waypoints;
     CarlaStreamThread(QObject *parent = nullptr);
     ~CarlaStreamThread();
     int image_callback (carla::SharedPtr<carla::sensor::SensorData> data);
     std::vector<float> InterensicParametes(int x,int y);
-    std::vector<boost::shared_ptr<carla::client::Waypoint>> CarOperations(int x, int y);
-    void Settransform(std::vector<boost::shared_ptr<carla::client::Waypoint> >,boost::shared_ptr<carla::client::Actor> actor);
+    void CarOperations(int x, int y);
+    void Settransform();
+    //void Settransform(std::vector<boost::shared_ptr<carla::client::Waypoint> > result, boost::shared_ptr<carla::client::Actor> actor);
     void ShowPath();
     int GenerateWaypoints();
 
@@ -48,10 +51,10 @@ protected:
     void run() Q_DECL_OVERRIDE;
 
 private:
-
+   std::vector<carla::SharedPtr<carla::client::Actor>> actor_list;
    carla::client::Client client_connection;
    carla::SharedPtr<carla::client::Sensor> camera;
-   std::vector<carla::SharedPtr<carla::client::Actor>> actor_list;
+   //std::vector<carla::SharedPtr<carla::client::Actor>> actor_list;
    carla::SharedPtr<carla::client::Map> waypoint;
 
 };

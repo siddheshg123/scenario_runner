@@ -37,6 +37,8 @@ private slots:
 
 
 
+    void on_SetTransform_clicked();
+
 private:
     Ui::MainWindow *ui;
 
