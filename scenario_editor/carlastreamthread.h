@@ -22,6 +22,7 @@
 #include <carla/client/DebugHelper.h>
 #include "carla/client/detail/EpisodeProxy.h"
 #include "carla/client/Vehicle.h"
+#include "carla/road/Road.h"
 
 class QImage;
 

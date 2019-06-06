@@ -96,6 +96,8 @@ std::vector<float> CarlaStreamThread::InterensicParametes(int x,int y)
 
 std::vector<std::vector<boost::shared_ptr<carla::client::Waypoint>>> CarlaStreamThread::all_waypoints = (std::vector<std::vector<boost::shared_ptr<carla::client::Waypoint>>>)0;
 std::vector<carla::SharedPtr<carla::client::Actor>> CarlaStreamThread::actor_list_set = (std::vector<carla::SharedPtr<carla::client::Actor>>)0;
+
+
 void CarlaStreamThread::CarOperations(int x=0, int y=0)
 {
     std::vector<boost::shared_ptr<carla::client::Waypoint> > waypoints_for_a_distance ;
