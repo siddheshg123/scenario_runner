@@ -196,7 +196,7 @@ void CarlaStreamThread::ShowPath()
  {
      auto world = client_connection.GetWorld();
      auto map = world.GetMap();
-     auto list_of_waypoints = map->GenerateWaypoints(10.0);
+     auto list_of_waypoints = map->GenerateWaypoints(1.0);
 
      for (auto i =list_of_waypoints.begin();i<list_of_waypoints.end();i++)
      {
