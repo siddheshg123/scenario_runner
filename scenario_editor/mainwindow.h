@@ -3,7 +3,6 @@
 
 
 #include <iostream>
-
 #include <QImage>
 #include <QGraphicsScene>
 #include <QMainWindow>
@@ -30,14 +29,12 @@ private slots:
     void showMousePosition(QPoint& pos);
     void on_GenerateWayPoints_clicked();
     void on_show_path_clicked();
-
-
-
-
-
-
-
     void on_SetTransform_clicked();
+    int on_checkBox_stateChanged(int arg1);
+
+    void on_DesiredShowPath_clicked();
+
+    void on_DesiredSetTransform_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -49,6 +46,7 @@ private:
     QGraphicsScene *scene;
 
 protected:
+    // void on_radioButton_clicked(bool checked,QMouseEvent* event);
     void mousePressEvent(QMouseEvent* event);
 };
 

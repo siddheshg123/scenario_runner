@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>820</width>
+    <width>1049</width>
     <height>500</height>
    </rect>
   </property>
@@ -43,9 +43,9 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>590</x>
-      <y>370</y>
-      <width>151</width>
+      <x>580</x>
+      <y>320</y>
+      <width>171</width>
       <height>51</height>
      </rect>
     </property>
@@ -59,10 +59,10 @@
    <widget class="QPushButton" name="GenerateWayPoints">
     <property name="geometry">
      <rect>
-      <x>590</x>
-      <y>90</y>
+      <x>580</x>
+      <y>60</y>
       <width>171</width>
-      <height>61</height>
+      <height>51</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -72,23 +72,13 @@
      <string>GENERATE WAYPOINTS</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="distance">
-    <property name="geometry">
-     <rect>
-      <x>590</x>
-      <y>40</y>
-      <width>151</width>
-      <height>31</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QPushButton" name="show_path">
     <property name="geometry">
      <rect>
-      <x>590</x>
-      <y>160</y>
+      <x>580</x>
+      <y>130</y>
       <width>171</width>
-      <height>61</height>
+      <height>51</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -103,9 +93,9 @@ background-color: rgb(138, 226, 52);</string>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>590</x>
-      <y>330</y>
-      <width>151</width>
+      <x>580</x>
+      <y>270</y>
+      <width>171</width>
       <height>31</height>
      </rect>
     </property>
@@ -119,10 +109,10 @@ background-color: rgb(138, 226, 52);</string>
    <widget class="QPushButton" name="SetTransform">
     <property name="geometry">
      <rect>
-      <x>590</x>
-      <y>240</y>
+      <x>580</x>
+      <y>200</y>
       <width>171</width>
-      <height>61</height>
+      <height>51</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -133,21 +123,62 @@ background-color: rgb(237, 212, 0);</string>
      <string>SET TRANSFORM</string>
     </property>
    </widget>
+   <widget class="QCheckBox" name="checkBox">
+    <property name="geometry">
+     <rect>
+      <x>610</x>
+      <y>30</y>
+      <width>92</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Spawn car if you want bc</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="DesiredShowPath">
+    <property name="geometry">
+     <rect>
+      <x>810</x>
+      <y>130</y>
+      <width>151</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Desires Show Path</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="DesiredSetTransform">
+    <property name="geometry">
+     <rect>
+      <x>810</x>
+      <y>200</y>
+      <width>161</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Desired_SetTransform</string>
+    </property>
+   </widget>
    <zorder>graphicsView_2</zorder>
    <zorder>graphicsView</zorder>
    <zorder>label</zorder>
    <zorder>GenerateWayPoints</zorder>
-   <zorder>distance</zorder>
    <zorder>show_path</zorder>
    <zorder>label_2</zorder>
    <zorder>SetTransform</zorder>
+   <zorder>checkBox</zorder>
+   <zorder>DesiredShowPath</zorder>
+   <zorder>DesiredSetTransform</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>820</width>
+     <width>1049</width>
      <height>22</height>
     </rect>
    </property>

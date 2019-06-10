@@ -33,14 +33,18 @@ class CarlaStreamThread : public QThread
 public:
     static std::vector<carla::SharedPtr<carla::client::Actor>> actor_list_set;
     static std::vector<std::vector<boost::shared_ptr<carla::client::Waypoint>>> all_waypoints;
+    static std::vector<std::vector<carla::geom::Transform>> vector_of_transforms;
     CarlaStreamThread(QObject *parent = nullptr);
     ~CarlaStreamThread();
     int image_callback (carla::SharedPtr<carla::sensor::SensorData> data);
     std::vector<float> InterensicParametes(int x,int y);
     void CarOperations(int x, int y);
+    void select_path(int x, int y);
     void Settransform();
+    void DesiredSetTransform();
     //void Settransform(std::vector<boost::shared_ptr<carla::client::Waypoint> > result, boost::shared_ptr<carla::client::Actor> actor);
     void ShowPath();
+    void DesiredShowPath();
     int GenerateWaypoints();
 
 signals:

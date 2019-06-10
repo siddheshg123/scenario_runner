@@ -26,13 +26,38 @@ int MainWindow::updatePixmap(const QImage &image) {
     return 0;
 }
 
+
+static int checked =0;
+
+
+int MainWindow::on_checkBox_stateChanged(int arg1)
+{
+
+checked = arg1;
+std::cout<<"checked_box clicked"<<"\n";
+ return arg1;
+}
+
+
 void MainWindow::mousePressEvent(QMouseEvent* event) {
+ if(checked)
+ {
     try {
         thread.CarOperations(event->x(), event->y());
     } catch(...) {
         std::cout << "\nFailed to spawn actor !\n";
     }
 }
+ else if (checked ==0) {
+     try {
+         thread.select_path(event->x(), event->y());
+     } catch(...) {
+         std::cout << "\nFailed to spawn actor !\n";
+     }
+
+ }
+}
+
 void MainWindow::showMousePosition(QPoint &pos)
 {
     ui->label->setText("x: "+QString::number(pos.x()-320) + "y: " + QString::number(pos.y()-240));
@@ -57,4 +82,34 @@ void MainWindow::on_SetTransform_clicked()
 {
     CarlaStreamThread c;
     c.Settransform();
+}
+
+
+
+
+//void MainWindow::on_radioButton_clicked(bool checked ,QMouseEvent* event)
+//{
+
+
+//   std::cout<<"inside radio buttton"<<"\n";
+////    QMouseEvent* event;
+//    try {
+//            thread.CarOperations(event->x(), event->y());
+//        } catch(...) {
+//            std::cout << "\nFailed to spawn actor !\n";
+//        }
+
+//}
+
+
+void MainWindow::on_DesiredShowPath_clicked()
+{
+    CarlaStreamThread c;
+    c.DesiredShowPath();
+}
+
+void MainWindow::on_DesiredSetTransform_clicked()
+{
+    CarlaStreamThread c;
+    c.DesiredSetTransform();
 }

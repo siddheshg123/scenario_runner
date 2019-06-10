@@ -96,6 +96,8 @@ std::vector<float> CarlaStreamThread::InterensicParametes(int x,int y)
 
 std::vector<std::vector<boost::shared_ptr<carla::client::Waypoint>>> CarlaStreamThread::all_waypoints = (std::vector<std::vector<boost::shared_ptr<carla::client::Waypoint>>>)0;
 std::vector<carla::SharedPtr<carla::client::Actor>> CarlaStreamThread::actor_list_set = (std::vector<carla::SharedPtr<carla::client::Actor>>)0;
+std::vector<std::vector<carla::geom::Transform>> CarlaStreamThread::vector_of_transforms =(std::vector<std::vector<carla::geom::Transform>>)0;
+
 void CarlaStreamThread::CarOperations(int x=0, int y=0)
 {
     std::vector<boost::shared_ptr<carla::client::Waypoint> > waypoints_for_a_distance ;
@@ -105,9 +107,10 @@ void CarlaStreamThread::CarOperations(int x=0, int y=0)
     auto bp = blueprint_library->Find("vehicle.tesla.model3");
     auto transform = carla::geom::Transform
     {
-        carla::geom::Location{InterensicParametes(x,y)[0], InterensicParametes(x,y)[1], 50.0f},
+        carla::geom::Location{InterensicParametes(x,y)[0], InterensicParametes(x,y)[1], 15.0f},
         carla::geom::Rotation{0.0f, 0.0f, 0.0f}
      };
+
 
     auto map = world.GetMap();
     auto waypoint_map = map->GetWaypoint(transform.location,true);
@@ -123,7 +126,7 @@ void CarlaStreamThread::CarOperations(int x=0, int y=0)
        waypoints_for_a_distance = (waypoints_for_a_distance[0])->GetNext(1.0);
     }
     all_waypoints.push_back(list_of_next_n_waypoints);
-    std::cout<< all_waypoints.size()<<"\n";
+    std::cout<<"Size of all_waypoints::"<< all_waypoints.size()<<"\n";
     //ShowPath(all_waypoints);
 
     auto new_transform = carla::geom::Transform
@@ -132,14 +135,72 @@ void CarlaStreamThread::CarOperations(int x=0, int y=0)
             carla::geom::Rotation{waypoint_map->GetTransform().rotation.pitch, waypoint_map->GetTransform().rotation.yaw,waypoint_map->GetTransform().rotation.roll}
     };
 
-    auto actor = world.SpawnActor(*bp,transform);
+
+//vector_of_transforms.push_back(new_transform);
+    auto actor = world.SpawnActor(*bp,new_transform);
 
    // Settransform(list_of_next_n_waypoints,actor);
 
    actor_list.push_back(actor);
    actor_list_set.push_back(actor);
-    //std::cout<<"debug check1"<<"\n";
+   std::cout<<"Size of actor_list_set::"<<actor_list_set.size()<<"\n";
+   //std::cout<<"debug check1"<<"\n";
 }
+
+//========================================================================================================================================================================================================
+// ******************************************************************CarlaStreamThread Select_path********************************************************************************************************
+//========================================================================================================================================================================================================
+
+
+ void CarlaStreamThread::select_path(int x, int y)
+ {
+
+     auto world = client_connection.GetWorld();
+     auto map = world.GetMap();
+
+     auto transform = carla::geom::Transform
+     {
+         carla::geom::Location{InterensicParametes(x,y)[0], InterensicParametes(x,y)[1], 15.0f},
+         carla::geom::Rotation{0.0f, 0.0f, 0.0f}
+      };
+      auto waypoint_map = map->GetWaypoint(transform.location,true);
+      auto new_transform = carla::geom::Transform
+      {
+              carla::geom::Location{waypoint_map->GetTransform().location.x, waypoint_map->GetTransform().location.y, waypoint_map->GetTransform().location.z},
+              carla::geom::Rotation{waypoint_map->GetTransform().rotation.pitch, waypoint_map->GetTransform().rotation.yaw,waypoint_map->GetTransform().rotation.roll}
+      };
+
+         std::vector<carla::geom::Transform> vector_of_transforms_for_every_actor;
+         vector_of_transforms_for_every_actor.push_back(new_transform);
+         vector_of_transforms.push_back(vector_of_transforms_for_every_actor);
+         std::cout<<"Vector of transforms size::"<<vector_of_transforms.size()<<"\n";
+
+}
+//========================================================================================================================================================================================================
+// ******************************************************************CarlaStreamThread DesiredSettransform********************************************************************************************************
+//========================================================================================================================================================================================================
+
+void CarlaStreamThread::DesiredSetTransform()
+{
+    auto delay =carla::time_duration::seconds(1);
+    auto world = client_connection.GetWorld();
+    auto map = world.GetMap();
+    std::vector<boost::shared_ptr<carla::client::Waypoint> > waypoints_for_a_distance;
+    for (int i =0; i<actor_list_set.size(); i++)
+    {
+         auto actor_transforms = vector_of_transforms[i];
+         for(auto j =actor_transforms.begin();j<actor_transforms.end();j++)
+                {
+             auto waypoint_map = map->GetWaypoint(j->location,true);
+             waypoints_for_a_distance = waypoint_map->GetNext(1.0);
+             world.WaitForTick(delay);
+             actor_list_set[i]->SetTransform(*j);
+
+                    }
+}
+}
+
+
 
 //========================================================================================================================================================================================================
 // ******************************************************************CarlaStreamThread Settransform********************************************************************************************************
@@ -165,6 +226,23 @@ void CarlaStreamThread::CarOperations(int x=0, int y=0)
       }
  }
 
+ //========================================================================================================================================================================================================
+ // ******************************************************************CarlaStreamThread Desired Show Path********************************************************************************************************
+ //========================================================================================================================================================================================================
+ void CarlaStreamThread::DesiredShowPath()
+ {
+     auto world = client_connection.GetWorld();
+
+     for(auto i = vector_of_transforms.begin();i<vector_of_transforms.end();i++)
+     {
+         for(auto j= i->begin();j<i->end();j++)
+         {
+         world.MakeDebugHelper().DrawPoint(j->location,0.1f,{0u,0u,0u},15.0f,true);
+     }
+ }
+}
+
+
 //========================================================================================================================================================================================================
 // ******************************************************************CarlaStreamThread ShowPath********************************************************************************************************
 //========================================================================================================================================================================================================
@@ -181,10 +259,8 @@ void CarlaStreamThread::ShowPath()
         {
 
         world.MakeDebugHelper().DrawPoint((*j)->GetTransform().location,0.05f,{255u,0u,0u},15.0f,true);
-    }
-    }
+    }}}
 
-}
 
 //========================================================================================================================================================================================================
 // ******************************************************************CarlaStreamThread Generate waypoints********************************************************************************************************
