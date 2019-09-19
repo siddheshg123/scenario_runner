@@ -5,6 +5,7 @@
 #include "boost/stacktrace.hpp"
 #include "carla/client/ActorList.h"
 #include "carla/client/Client.h"
+#include "carla/Logging.h"
 
 #include "BatchControlStage.h"
 #include "CollisionStage.h"
@@ -41,14 +42,13 @@ std::vector<carla::SharedPtr<carla::client::Actor>>* global_actor_list;
 void handler() {
 
   if (!quit.load()) {
-    std::cout << "TrafficManager encountered a problem!" << std::endl;
-    std::cout << "Destorying all actors spawned" << std::endl;
+     carla::log_error("TrafficManager encountered a problem!\n");
+     carla::log_info("Destorying all actors spawned\n");
     for (auto actor: *global_actor_list) {
       if (actor != nullptr && actor->IsAlive()) {
         actor->Destroy();
       }
     }
-    // std::cout << boost::stacktrace::stacktrace() << std::endl;
     exit(1);
   }
 } 
